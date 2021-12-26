@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { SearchInput } from "../molecules/SearchInput";
 import { UserCard } from "../organisms/user/UserCard";
+import { useLocation } from "react-router-dom";
 
 // [...Array(n).keys()]は、JavaScriptで0からn-1までの整数が順番に並んだ配列を得る記法
 // val には、上記で作った配列各要素の値が入る
@@ -18,7 +19,11 @@ const users = [...Array(18).keys()].map((val) => {
   };
 });
 
-export const Users = () => {
+export const Users = (props) => {
+  // stateを受け取るのはuseLocation
+  const { state } = useLocation();
+  const isAdmin = state ? state.isAdmin : false;
+  console.log(state);
   return (
     <SContainer>
       <h2>ユーザー一覧</h2>
@@ -26,7 +31,7 @@ export const Users = () => {
       {/* たぶん、return部分でhtml element を返すため　()で囲っている */}
       <SUserArea>
         {users.map((user) => (
-          <UserCard key={user.id} user={user} />
+          <UserCard key={user.id} user={user} isAdmin={isAdmin} />
         ))}
       </SUserArea>
     </SContainer>
