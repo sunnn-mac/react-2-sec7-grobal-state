@@ -1,7 +1,10 @@
+import { useContext } from "react";
 import styled from "styled-components";
+import { UserContext } from "../../providers/UserProvider";
+import { SecondaryButton } from "../atoms/button/SecondaryButton";
 import { SearchInput } from "../molecules/SearchInput";
 import { UserCard } from "../organisms/user/UserCard";
-import { useLocation } from "react-router-dom";
+// import { useLocation } from "react-router-dom";
 
 // [...Array(n).keys()]は、JavaScriptで0からn-1までの整数が順番に並んだ配列を得る記法
 // val には、上記で作った配列各要素の値が入る
@@ -20,18 +23,24 @@ const users = [...Array(18).keys()].map((val) => {
 });
 
 export const Users = (props) => {
+  const { userInfo, setUserInfo } = useContext(UserContext);
+  const onClickSwitch = () => {
+    setUserInfo({ isAdmin: !userInfo.isAdmin });
+  };
+
   // stateを受け取るのはuseLocation
-  const { state } = useLocation();
-  const isAdmin = state ? state.isAdmin : false;
-  console.log(state);
+  // const { state } = useLocation();
+  // console.log(state);
   return (
     <SContainer>
       <h2>ユーザー一覧</h2>
       <SearchInput />
+      <br />
+      <SecondaryButton onClick={onClickSwitch}>切り替え</SecondaryButton>
       {/* たぶん、return部分でhtml element を返すため　()で囲っている */}
       <SUserArea>
         {users.map((user) => (
-          <UserCard key={user.id} user={user} isAdmin={isAdmin} />
+          <UserCard key={user.id} user={user} />
         ))}
       </SUserArea>
     </SContainer>
